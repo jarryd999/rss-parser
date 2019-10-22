@@ -1,42 +1,46 @@
 {
-  "name": "rss-parser",
-  "version": "3.7.3",
+  "name": "@jarryd999/rss-parser-browser",
+  "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "types": "index.d.ts",
   "scripts": {
     "test": "mocha --exit",
-    "build": "./scripts/build.sh"
+    "build": "./scripts/build.sh",
+    "j": "webpack-cli --mode=development --target=web && webpack-cli --mode=production --target=web --output-filename=dist/rss-parser.min.js --profile --json > dist/stats.json"
   },
-  "author": "Bobby Brennan",
+  "author": "Jarryd Goodman",
+  "forkedFrom": "Bobby Brennan",
   "license": "MIT",
   "devDependencies": {
-    "@types/xml2js": "^0.4.3",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.5",
-    "babel-preset-env": "^1.7.0",
-    "chai": "^3.4.1",
-    "express": "^4.16.3",
-    "mocha": "^5.2.0",
-    "puppeteer": "^1.16.0",
-    "webpack": "^4.41.0",
-    "webpack-cli": "^3.3.9"
+    "@types/xml2js": "0.4.3",
+    "babel-core": "6.26.3",
+    "babel-loader": "7.1.5",
+    "babel-preset-env": "1.7.0",
+    "chai": "3.4.1",
+    "express": "4.16.3",
+    "mocha": "5.2.0",
+    "puppeteer": "1.16.0",
+    "webpack": "4.41.0",
+    "webpack-cli": "3.3.9"
   },
   "dependencies": {
-    "entities": "^1.1.1",
-    "xml2js": "^0.4.19"
+    "entities": "1.1.1",
+    "xml2js": "0.4.19"
   },
   "directories": {
+    "lib": "lib",
     "test": "test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bobby-brennan/rss-parser.git"
+    "url": "git+https://github.com/jarryd999/rss-parser.git"
   },
   "bugs": {
-    "url": "https://github.com/bobby-brennan/rss-parser/issues"
+    "url": "https://github.com/jarryd999/rss-parser/issues"
   },
-  "homepage": "https://github.com/bobby-brennan/rss-parser#readme",
-  "description": "A lightweight RSS parser, for Node and the browser",
+  "homepage": "https://github.com/jarryd999/rss-parser#readme",
+  "description": "A lightweight RSS parser, for the browser that supports ES Modules",
   "keywords": [
     "RSS",
     "RSS to JSON",

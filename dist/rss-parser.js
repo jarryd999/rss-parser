@@ -120,8 +120,9 @@ module.exports = __webpack_require__(/*! ./lib/parser */ "./lib/parser.js");
 "use strict";
 
 
-var fields = module.exports = {};
-
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 fields.feed = [['author', 'creator'], ['dc:publisher', 'publisher'], ['dc:creator', 'creator'], ['dc:source', 'source'], ['dc:title', 'title'], ['dc:type', 'type'], 'title', 'description', 'author', 'pubDate', 'webMaster', 'managingEditor', 'generator', 'link', 'language', 'copyright', 'lastBuildDate', 'docs', 'generator', 'ttl', 'rating', 'skipHours', 'skipDays'];
 
 fields.item = [['author', 'creator'], ['dc:creator', 'creator'], ['dc:date', 'date'], ['dc:language', 'language'], ['dc:rights', 'rights'], ['dc:source', 'source'], ['dc:title', 'title'], 'title', 'link', 'pubDate', 'author', 'content:encoded', 'enclosure', 'dc:creator', 'dc:date', 'comments'];
@@ -133,6 +134,8 @@ var mapItunesField = function mapItunesField(f) {
 fields.podcastFeed = ['author', 'subtitle', 'summary', 'explicit'].map(mapItunesField);
 
 fields.podcastItem = ['author', 'subtitle', 'summary', 'explicit', 'duration', 'image', 'episode', 'image', 'season', 'keywords'].map(mapItunesField);
+
+exports.default = fields;
 
 /***/ }),
 
@@ -148,15 +151,33 @@ fields.podcastItem = ['author', 'subtitle', 'summary', 'explicit', 'duration', '
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _http = __webpack_require__(/*! http */ "./node_modules/stream-http/index.js");
+
+var http = _interopRequireWildcard(_http);
+
+var _xml2js = __webpack_require__(/*! xml2js */ "./node_modules/xml2js/lib/xml2js.js");
+
+var xml2js = _interopRequireWildcard(_xml2js);
+
+var _https = __webpack_require__(/*! https */ "./node_modules/https-browserify/index.js");
+
+var https = _interopRequireWildcard(_https);
+
+var _url = __webpack_require__(/*! url */ "./node_modules/url/url.js");
+
+var url = _interopRequireWildcard(_url);
+
+var _fields = __webpack_require__(/*! ./fields */ "./lib/fields.js");
+
+var fields = _interopRequireWildcard(_fields);
+
+var _utils = __webpack_require__(/*! ./utils */ "./lib/utils.js");
+
+var utils = _interopRequireWildcard(_utils);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var http = __webpack_require__(/*! http */ "./node_modules/stream-http/index.js");
-var https = __webpack_require__(/*! https */ "./node_modules/https-browserify/index.js");
-var xml2js = __webpack_require__(/*! xml2js */ "./node_modules/xml2js/lib/xml2js.js");
-var url = __webpack_require__(/*! url */ "./node_modules/url/url.js");
-
-var fields = __webpack_require__(/*! ./fields */ "./lib/fields.js");
-var utils = __webpack_require__(/*! ./utils */ "./lib/utils.js");
 
 var DEFAULT_HEADERS = {
   'User-Agent': 'rss-parser',
@@ -477,11 +498,21 @@ module.exports = Parser;
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var utils = module.exports = {};
-var entities = __webpack_require__(/*! entities */ "./node_modules/entities/index.js");
-var xml2js = __webpack_require__(/*! xml2js */ "./node_modules/xml2js/lib/xml2js.js");
+var _entities = __webpack_require__(/*! entities */ "./node_modules/entities/index.js");
+
+var entities = _interopRequireWildcard(_entities);
+
+var _xml2js = __webpack_require__(/*! xml2js */ "./node_modules/xml2js/lib/xml2js.js");
+
+var xml2js = _interopRequireWildcard(_xml2js);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 utils.stripHtml = function (str) {
   return str.replace(/<(?:.|\n)*?>/gm, '');
@@ -566,6 +597,8 @@ utils.getEncodingFromContentType = function (contentType) {
   }
   return encoding;
 };
+
+exports.default = utils;
 
 /***/ }),
 
