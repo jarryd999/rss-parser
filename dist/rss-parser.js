@@ -123,6 +123,8 @@ module.exports = __webpack_require__(/*! ./lib/parser */ "./lib/parser.js");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var fields = {};
+
 fields.feed = [['author', 'creator'], ['dc:publisher', 'publisher'], ['dc:creator', 'creator'], ['dc:source', 'source'], ['dc:title', 'title'], ['dc:type', 'type'], 'title', 'description', 'author', 'pubDate', 'webMaster', 'managingEditor', 'generator', 'link', 'language', 'copyright', 'lastBuildDate', 'docs', 'generator', 'ttl', 'rating', 'skipHours', 'skipDays'];
 
 fields.item = [['author', 'creator'], ['dc:creator', 'creator'], ['dc:date', 'date'], ['dc:language', 'language'], ['dc:rights', 'rights'], ['dc:source', 'source'], ['dc:title', 'title'], 'title', 'link', 'pubDate', 'author', 'content:encoded', 'enclosure', 'dc:creator', 'dc:date', 'comments'];
@@ -149,6 +151,10 @@ exports.default = fields;
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _http = __webpack_require__(/*! http */ "./node_modules/stream-http/index.js");
@@ -167,13 +173,15 @@ var _url = __webpack_require__(/*! url */ "./node_modules/url/url.js");
 
 var url = _interopRequireWildcard(_url);
 
-var _fields = __webpack_require__(/*! ./fields */ "./lib/fields.js");
+var _fields = __webpack_require__(/*! ./fields.js */ "./lib/fields.js");
 
-var fields = _interopRequireWildcard(_fields);
+var _fields2 = _interopRequireDefault(_fields);
 
-var _utils = __webpack_require__(/*! ./utils */ "./lib/utils.js");
+var _utils = __webpack_require__(/*! ./utils.js */ "./lib/utils.js");
 
-var utils = _interopRequireWildcard(_utils);
+var _utils2 = _interopRequireDefault(_utils);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -243,7 +251,7 @@ var Parser = function () {
           resolve(feed);
         });
       });
-      prom = utils.maybePromisify(callback, prom);
+      prom = _utils2.default.maybePromisify(callback, prom);
       return prom;
     }
   }, {
@@ -276,7 +284,7 @@ var Parser = function () {
           } else if (res.statusCode >= 300) {
             return reject(new Error("Status code " + res.statusCode));
           }
-          var encoding = utils.getEncodingFromContentType(res.headers['content-type']);
+          var encoding = _utils2.default.getEncodingFromContentType(res.headers['content-type']);
           res.setEncoding(encoding);
           res.on('data', function (chunk) {
             xml += chunk;
@@ -290,7 +298,7 @@ var Parser = function () {
         });
         req.on('error', reject);
       });
-      prom = utils.maybePromisify(callback, prom);
+      prom = _utils2.default.maybePromisify(callback, prom);
       return prom;
     }
   }, {
@@ -299,10 +307,10 @@ var Parser = function () {
       var _this3 = this;
 
       var feed = { items: [] };
-      utils.copyFromXML(xmlObj.feed, feed, this.options.customFields.feed);
+      _utils2.default.copyFromXML(xmlObj.feed, feed, this.options.customFields.feed);
       if (xmlObj.feed.link) {
-        feed.link = utils.getLink(xmlObj.feed.link, 'alternate', 0);
-        feed.feedUrl = utils.getLink(xmlObj.feed.link, 'self', 1);
+        feed.link = _utils2.default.getLink(xmlObj.feed.link, 'alternate', 0);
+        feed.feedUrl = _utils2.default.getLink(xmlObj.feed.link, 'self', 1);
       }
       if (xmlObj.feed.title) {
         var title = xmlObj.feed.title[0] || '';
@@ -314,21 +322,21 @@ var Parser = function () {
       }
       (xmlObj.feed.entry || []).forEach(function (entry) {
         var item = {};
-        utils.copyFromXML(entry, item, _this3.options.customFields.item);
+        _utils2.default.copyFromXML(entry, item, _this3.options.customFields.item);
         if (entry.title) {
           var _title = entry.title[0] || '';
           if (_title._) _title = _title._;
           if (_title) item.title = _title;
         }
         if (entry.link && entry.link.length) {
-          item.link = utils.getLink(entry.link, 'alternate', 0);
+          item.link = _utils2.default.getLink(entry.link, 'alternate', 0);
         }
         if (entry.published && entry.published.length && entry.published[0].length) item.pubDate = new Date(entry.published[0]).toISOString();
         if (!item.pubDate && entry.updated && entry.updated.length && entry.updated[0].length) item.pubDate = new Date(entry.updated[0]).toISOString();
         if (entry.author && entry.author.length) item.author = entry.author[0].name[0];
         if (entry.content && entry.content.length) {
-          item.content = utils.getContent(entry.content[0]);
-          item.contentSnippet = utils.getSnippet(item.content);
+          item.content = _utils2.default.getContent(entry.content[0]);
+          item.contentSnippet = _utils2.default.getSnippet(item.content);
         }
         if (entry.id) {
           item.id = entry.id[0];
@@ -371,8 +379,8 @@ var Parser = function () {
 
       items = items || [];
       var feed = { items: [] };
-      var feedFields = fields.feed.concat(this.options.customFields.feed);
-      var itemFields = fields.item.concat(this.options.customFields.item);
+      var feedFields = _fields2.default.feed.concat(this.options.customFields.feed);
+      var itemFields = _fields2.default.item.concat(this.options.customFields.item);
       if (channel['atom:link'] && channel['atom:link'][0] && channel['atom:link'][0].$) {
         feed.feedUrl = channel['atom:link'][0].$.href;
       }
@@ -385,16 +393,16 @@ var Parser = function () {
         if (image.width) feed.image.width = image.width[0];
         if (image.height) feed.image.height = image.height[0];
       }
-      utils.copyFromXML(channel, feed, feedFields);
+      _utils2.default.copyFromXML(channel, feed, feedFields);
       items.forEach(function (xmlItem) {
         var item = {};
-        utils.copyFromXML(xmlItem, item, itemFields);
+        _utils2.default.copyFromXML(xmlItem, item, itemFields);
         if (xmlItem.enclosure) {
           item.enclosure = xmlItem.enclosure[0].$;
         }
         if (xmlItem.description) {
-          item.content = utils.getContent(xmlItem.description[0]);
-          item.contentSnippet = utils.getSnippet(item.content);
+          item.content = _utils2.default.getContent(xmlItem.description[0]);
+          item.contentSnippet = _utils2.default.getSnippet(item.content);
         }
         if (xmlItem.guid) {
           item.guid = xmlItem.guid[0];
@@ -456,11 +464,11 @@ var Parser = function () {
         }
         if (keywords) feed.itunes.keywords = keywords.split(",");
       }
-      utils.copyFromXML(channel, feed.itunes, fields.podcastFeed);
+      _utils2.default.copyFromXML(channel, feed.itunes, _fields2.default.podcastFeed);
       items.forEach(function (item, index) {
         var entry = feed.items[index];
         entry.itunes = {};
-        utils.copyFromXML(item, entry.itunes, fields.podcastItem);
+        _utils2.default.copyFromXML(item, entry.itunes, _fields2.default.podcastItem);
         var image = item['itunes:image'];
         if (image && image[0] && image[0].$ && image[0].$.href) {
           entry.itunes.image = image[0].$.href;
@@ -484,7 +492,7 @@ var Parser = function () {
   return Parser;
 }();
 
-module.exports = Parser;
+exports.default = Parser;
 
 /***/ }),
 
@@ -513,6 +521,8 @@ var _xml2js = __webpack_require__(/*! xml2js */ "./node_modules/xml2js/lib/xml2j
 var xml2js = _interopRequireWildcard(_xml2js);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var utils = {};
 
 utils.stripHtml = function (str) {
   return str.replace(/<(?:.|\n)*?>/gm, '');
